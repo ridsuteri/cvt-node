@@ -1,13 +1,15 @@
 const express = require("express");
 const sampleMiddleware = require("./middlewares/logger");
-const productRoutes = require('./routes/productRoutes')
+const productRoutes = require("./routes/productRoutes");
 const app = express();
 const port = 3000;
 
 // 1. using an existing middleware
 // 2. create our own middleware
 app.use(express.json());
-app.use('/products', productRoutes)
+app.use(express.static('public'))
+app.set("view engine", "ejs");
+app.use("/products", productRoutes);
 // app.use(sampleMiddleware)
 
 app.get("/", (req, res) => {
@@ -18,6 +20,12 @@ app.get("/health", sampleMiddleware, (req, res) => {
   res.status(200).json({ message: `App is up and running 🚀 ${port}` });
 });
 
+app.get("/template", (req, res) => {
+  res.render("./homepage", {
+    title: "dynamic title",
+    heading: "dynamic heading",
+  });
+});
 // /products?id=1&price<1000
 // /products/:id
 
