@@ -1,11 +1,13 @@
 const express = require("express");
 const sampleMiddleware = require("./middlewares/logger");
 const productRoutes = require("./routes/productRoutes");
+const connectToDb = require('./config/db')
 const app = express();
 const port = 3000;
 
 // 1. using an existing middleware
 // 2. create our own middleware
+connectToDb();
 app.use(express.json());
 app.use(express.static('public'))
 app.set("view engine", "ejs");
