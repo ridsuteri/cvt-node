@@ -1,26 +1,41 @@
-const productArray = require("../products.json");
+const Product = require("../models/Product");
 
-const getProductWithId = (req, res) => {
+const getProductWithId = async (req, res) => {
   // {id : 1, name: 'riddhi'}
   const { id } = req.params;
-  const filteredProduct = productArray.filter((product) => {
-    if (product.id == id) return product;
-  });
-  if (filteredProduct.length > 0) {
-    res.status(200).send(filteredProduct);
-  } else {
-    res.status(404).send("product doesnt exits");
+  try {
+    const queriedProducts = await Product.find({ _id: id });
+    res.status(200).send(queriedProducts);
+  } catch (err) {
+    res.status(500).send(`error fetching products : ${err}`);
   }
 };
 
 const addProduct = (req, res) => {
-  // will add product
-  console.log(req.body);
-  res.status(201).send("product added successfully");
+  try {
+    console.log(req.body);
+    // prepare the data to be inserted in a obj like structure
+    // simply insert this object to the db now
+    const product = new Product({
+      name: req.body.name,
+      category: req.body.category,
+      price: req.body.price,
+    });
+    let response = product.save();
+    res.status(201).send("product added successfully");
+  } catch (err) {
+    console.log("error saving the product", err);
+    res.status(500).send(`error saving product ${err}`)
+  }
 };
 
-const getProducts = (req, res) => {
-  res.status(200).send(productArray);
+const getProducts = async (req, res) => {
+  try {
+    const allProducts = await Product.find();
+    res.status(200).send(allProducts);
+  } catch (err) {
+    res.status(500).send(`error fetching products : ${err}`);
+  }
 };
 
 module.exports = { getProductWithId, addProduct, getProducts };

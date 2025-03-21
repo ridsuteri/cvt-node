@@ -1,6 +1,7 @@
 const express = require("express");
 const sampleMiddleware = require("./middlewares/logger");
 const productRoutes = require("./routes/productRoutes");
+const userRoutes = require("./routes/userRoutes");
 const connectToDb = require('./config/db')
 const app = express();
 const port = 3000;
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.static('public'))
 app.set("view engine", "ejs");
 app.use("/products", productRoutes);
+app.use('/userdetails', userRoutes)
 // app.use(sampleMiddleware)
 
 app.get("/", (req, res) => {
