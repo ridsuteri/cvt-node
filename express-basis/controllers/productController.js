@@ -2,6 +2,7 @@ const Product = require("../models/Product");
 
 const getProductWithId = async (req, res) => {
   // {id : 1, name: 'riddhi'}
+  console.log('details of user accessing it', req.user)
   const { id } = req.params;
   try {
     const queriedProducts = await Product.find({ _id: id });

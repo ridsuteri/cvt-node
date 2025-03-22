@@ -1,10 +1,14 @@
 const express = require("express");
+const dotenv = require('dotenv');
 const sampleMiddleware = require("./middlewares/logger");
+const authMiddleware = require('./middlewares/authMiddleware')
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
+const authRoutes = require("./routes/authRoutes");
 const connectToDb = require('./config/db')
 const app = express();
 const port = 3000;
+dotenv.config();
 
 // 1. using an existing middleware
 // 2. create our own middleware
@@ -12,8 +16,9 @@ connectToDb();
 app.use(express.json());
 app.use(express.static('public'))
 app.set("view engine", "ejs");
-app.use("/products", productRoutes);
+app.use("/products",authMiddleware, productRoutes);
 app.use('/userdetails', userRoutes)
+app.use('/auth', authRoutes)
 // app.use(sampleMiddleware)
 
 app.get("/", (req, res) => {
