@@ -1,14 +1,14 @@
 const express = require("express");
 const dotenv = require('dotenv');
-const sampleMiddleware = require("./middlewares/logger");
+dotenv.config();
 const authMiddleware = require('./middlewares/authMiddleware')
+const redisConnection = require('./config/redis')
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const connectToDb = require('./config/db')
 const app = express();
 const port = 3000;
-dotenv.config();
 
 // 1. using an existing middleware
 // 2. create our own middleware
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/health", sampleMiddleware, (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).json({ message: `App is up and running 🚀 ${port}` });
 });
 

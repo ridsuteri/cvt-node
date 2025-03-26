@@ -1,4 +1,5 @@
 const express = require('express')
+const checkCache = require('../middlewares/checkCache')
 const {
   getProductWithId,
   addProduct,
@@ -8,7 +9,7 @@ const router = express.Router()
 
 router.get("/", getProducts);
 
-router.get("/:id", getProductWithId);
+router.get("/:id",checkCache, getProductWithId);
 
 router.post("/", addProduct);
 

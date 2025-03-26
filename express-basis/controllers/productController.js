@@ -1,11 +1,12 @@
 const Product = require("../models/Product");
-
+const client = require('../config/redis');
 const getProductWithId = async (req, res) => {
   // {id : 1, name: 'riddhi'}
   console.log('details of user accessing it', req.user)
   const { id } = req.params;
   try {
     const queriedProducts = await Product.find({ _id: id });
+    await client.set(id, JSON.stringify(queriedProducts));
     res.status(200).send(queriedProducts);
   } catch (err) {
     res.status(500).send(`error fetching products : ${err}`);
